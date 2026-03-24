@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for i:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/yabseraermias/Desktop/ai-management-site/components/**)",
+      "Bash(done)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias=\"@/*\" --yes)",
+      "Bash(mkdir -p /tmp/ai-site)",
+      "Read(//tmp/**)"
+    ]
+  }
+}
