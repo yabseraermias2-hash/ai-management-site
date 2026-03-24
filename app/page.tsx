@@ -1,19 +1,16 @@
-import Navbar from "../components/ui/vercel-navbar";
-import Hero from "../components/ui/vercel-hero";
-import Features from "../components/ui/core-features";
-import Testimonials from "../components/ui/testimonial-card";
+import { Header } from "../components/ui/vercel-navbar";
+import { Hero } from "../components/ui/vercel-hero";
 import Pricing from "../components/ui/pricing-base";
-import Footer from "../components/ui/footer";
-
+import { Footer } from "../components/ui/footer";
+import Testimonials from "../components/ui/testimonials";
 export default function Home() {
   return (
     <main>
-      <Navbar />
+      <Header />
       <Hero />
-      <Features />
-      <Testimonials />
       <Pricing />
       <Footer />
+      <Testimonials />
     </main>
   );
 }
