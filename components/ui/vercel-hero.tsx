@@ -1,126 +1,180 @@
 "use client";
 
 import Link from "next/link";
-import { Plus, Triangle } from "lucide-react";
+import { motion } from "framer-motion";
+import { ArrowRight, Zap, Activity, Cpu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+const stats = [
+  { label: "Models Deployed", value: "12,400+", icon: Cpu },
+  { label: "Uptime SLA", value: "99.99%", icon: Activity },
+  { label: "Avg Latency", value: "< 50ms", icon: Zap },
+];
+
+const floatingCards = [
+  {
+    title: "Model Health",
+    value: "Optimal",
+    change: "+2.4%",
+    positive: true,
+    top: "10%",
+    left: "2%",
+  },
+  {
+    title: "Active Agents",
+    value: "1,847",
+    change: "+124 today",
+    positive: true,
+    top: "60%",
+    left: "1%",
+  },
+  {
+    title: "Token Usage",
+    value: "4.2B",
+    change: "this month",
+    positive: true,
+    top: "20%",
+    right: "2%",
+  },
+  {
+    title: "Cost Saved",
+    value: "$18,200",
+    change: "vs last month",
+    positive: true,
+    top: "65%",
+    right: "1%",
+  },
+];
 
 export function Hero() {
   return (
-    <div className="pt-10 px-4 lg:px-0 flex mx-auto max-w-6xl flex-col items-center justify-center text-center">
-      <div className="grid w-full border-0 border-b md:border relative grid-cols-10">
-        <div
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "radial-gradient(80% 100% at 0% 100%, #f97316 50%, #3b82f6 100%)",
-            WebkitMaskImage:
-              "linear-gradient(to top, black 0%, transparent 60%)",
-            maskImage: "linear-gradient(to top, black 0%, transparent 60%)",
-            WebkitMaskRepeat: "no-repeat",
-            maskRepeat: "no-repeat",
-          }}
-        />
+    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+      {/* Grid background */}
+      <div className="absolute inset-0 grid-pattern opacity-60" />
 
-        <Plus size={30} strokeWidth={0.8} className="absolute -top-4 -left-4" />
-        <Plus
-          size={30}
-          strokeWidth={0.8}
-          className="absolute -bottom-4 -right-4"
-        />
-        <div className="md:grid hidden w-full col-span-1">
-          {Array.from({ length: 8 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="border-b last:border-0 flex-1 aspect-square"
-            />
-          ))}
-        </div>
-        <div className="md:col-span-8 col-span-10">
-          <div className="md:flex hidden">
-            {Array.from({ length: 8 }).map((_, idx) => (
+      {/* Gradient orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pulse-glow pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Floating stat cards */}
+      {floatingCards.map((card, i) => (
+        <motion.div
+          key={card.title}
+          className="absolute hidden xl:block glass rounded-xl p-3 min-w-[160px] z-10"
+          style={{
+            top: card.top,
+            left: card.left,
+            right: card.right,
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 + i * 0.15, duration: 0.6 }}
+        >
+          <p className="text-xs text-muted-foreground mb-1">{card.title}</p>
+          <p className="text-lg font-bold text-foreground">{card.value}</p>
+          <p className={`text-xs ${card.positive ? "text-emerald-400" : "text-red-400"}`}>
+            {card.change}
+          </p>
+        </motion.div>
+      ))}
+
+      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center">
+        {/* Badge */}
+        <motion.div
+          className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-muted-foreground mb-8 border border-cyan-500/20"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+          Now in public beta — AI Orchestration v2.0 is live
+          <ArrowRight size={14} />
+        </motion.div>
+
+        {/* Headline */}
+        <motion.h1
+          className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-none mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7 }}
+        >
+          <span className="gradient-text-cyan">Manage Your</span>
+          <br />
+          <span className="gradient-text">AI Infrastructure</span>
+          <br />
+          <span className="text-foreground">at Scale.</span>
+        </motion.h1>
+
+        {/* Subheadline */}
+        <motion.p
+          className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.7 }}
+        >
+          Unified platform for deploying, monitoring, and optimizing your AI
+          models, agents, and workflows. Ship faster. Scale smarter. Spend less.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          className="flex flex-wrap gap-4 justify-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7 }}
+        >
+          <Link href="#">
+            <Button
+              size="lg"
+              className="rounded-full h-12 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold glow-cyan transition-all duration-300 cursor-pointer"
+            >
+              <Zap size={16} className="mr-2" />
+              Start Free
+            </Button>
+          </Link>
+          <Link href="#">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full h-12 px-8 border-muted-foreground/20 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 cursor-pointer"
+            >
+              View Demo
+              <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </Link>
+        </motion.div>
+
+        {/* Stats bar */}
+        <motion.div
+          className="grid grid-cols-3 gap-4 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+        >
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
               <div
-                key={idx}
-                className="border-l last:border-r flex-1 aspect-square"
-              />
-            ))}
-          </div>
-          <div className="relative w-full border -mt-0.5 flex items-center flex-col justify-center md:h-89 lg:h-116 p-6 md:p-20">
-            <h1 className="flex flex-col text-center text-3xl leading-none font-semibold tracking-tight lg:text-5xl">
-              Build and deploy on the AI Cloud.
-            </h1>
-            <p className="md:text-md text-muted-foreground py-6 lg:text-lg">
-              Vercel provides the developer tools and cloud infrastructure{" "}
-              <br /> to build, scale, and secure a faster, more personalized
-              web.
-            </p>
-            <div className="flex flex-wrap justify-center gap-2">
-              <Link href={"/"}>
-                <Button
-                  className="cursor-pointer rounded-full w-46 h-12"
-                  variant="default"
-                >
-                  <Triangle className="fill-background" size={14} />
-                  Start Deploying
-                </Button>
-              </Link>
-              <Link href={"#"}>
-                <Button
-                  className="cursor-pointer rounded-full w-46 h-12"
-                  variant="outline"
-                >
-                  Get a Demo
-                </Button>
-              </Link>
-            </div>
-          </div>
-          <div className="relative w-full h-full">
-            <div className="absolute z-10 top-15 md:top-22 lg:top-29 left-1/2 -translate-x-1/2 -translate-y-1/2">
-              <img
-                className="size-34 md:size-50 lg:size-66 dark:hidden"
-                alt="Vercel Logo"
-                src="https://raw.githubusercontent.com/aliimam-in/templates/076f7e05b77fc6d31aa3c751406c9b2123c45954/apps/vercel/public/vercel-logo-white.svg"
-              />
-              <img
-                className="size-34 md:size-50 lg:size-66 hidden dark:block"
-                alt="Vercel Logo"
-                src="https://raw.githubusercontent.com/aliimam-in/templates/076f7e05b77fc6d31aa3c751406c9b2123c45954/apps/vercel/public/vercel-logo-black.svg"
-              />
-            </div>
-            <div className="flex">
-              {Array.from({ length: 8 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="border-l last:border-r border-b flex-1 aspect-square"
+                key={stat.label}
+                className="glass rounded-xl p-4 border border-white/5 hover:border-cyan-500/20 transition-colors group"
+              >
+                <Icon
+                  size={16}
+                  className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform"
                 />
-              ))}
-            </div>
-            <div className="flex">
-              {Array.from({ length: 8 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="border-l border-b last:border-r flex-1 aspect-square"
-                />
-              ))}
-            </div>
-            <div className="flex">
-              {Array.from({ length: 8 }).map((_, idx) => (
-                <div
-                  key={idx}
-                  className="border-l last:border-r flex-1 aspect-square"
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-        <div className="md:grid hidden col-span-1">
-          {Array.from({ length: 8 }).map((_, idx) => (
-            <div
-              key={idx}
-              className="border-b last:border-b-0 flex-1 aspect-square"
-            />
-          ))}
-        </div>
+                <div className="text-2xl font-bold text-foreground">
+                  {stat.value}
+                </div>
+                <div className="text-xs text-muted-foreground">{stat.label}</div>
+              </div>
+            );
+          })}
+        </motion.div>
       </div>
-    </div>
+
+      {/* Bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+    </section>
   );
 }

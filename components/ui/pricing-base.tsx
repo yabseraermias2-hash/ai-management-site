@@ -1,126 +1,190 @@
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Check } from 'lucide-react'
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Check, Sparkles, Zap } from "lucide-react";
+
+const plans = [
+  {
+    name: "Starter",
+    price: "$0",
+    period: "/ month",
+    description: "Perfect for individuals and small experiments.",
+    cta: "Get Started Free",
+    ctaVariant: "outline" as const,
+    popular: false,
+    features: [
+      "Up to 3 AI models",
+      "1M tokens / month",
+      "Basic monitoring dashboard",
+      "Community support",
+      "REST API access",
+      "Standard latency",
+    ],
+  },
+  {
+    name: "Pro",
+    price: "$29",
+    period: "/ month",
+    description: "For teams shipping production AI features.",
+    cta: "Start Pro Trial",
+    ctaVariant: "default" as const,
+    popular: true,
+    features: [
+      "Unlimited AI models",
+      "50M tokens / month",
+      "Advanced analytics & tracing",
+      "Priority email support",
+      "Webhook integrations",
+      "Low-latency inference",
+      "Agent orchestration",
+      "Custom rate limits",
+      "Team collaboration",
+      "99.9% uptime SLA",
+    ],
+  },
+  {
+    name: "Enterprise",
+    price: "$99",
+    period: "/ month",
+    description: "For organizations with mission-critical AI workloads.",
+    cta: "Contact Sales",
+    ctaVariant: "outline" as const,
+    popular: false,
+    features: [
+      "Everything in Pro",
+      "Unlimited token usage",
+      "Dedicated infrastructure",
+      "24/7 dedicated support",
+      "SOC 2 Type II compliance",
+      "Custom SLA guarantees",
+      "On-premise deployment",
+      "Advanced security controls",
+    ],
+  },
+];
 
 export default function Pricing() {
   return (
-    <section className="py-16 md:py-32">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mx-auto max-w-2xl space-y-6 text-center">
-          <h1 className="text-center text-4xl font-semibold lg:text-5xl">
-            Pricing that Scales with You
-          </h1>
-          <p>
-            Gemini is evolving to be more than just the models. It supports an
-            entire to the APIs and platforms helping developers and businesses
-            innovate.
+    <section className="relative py-24 md:py-32 overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 dot-pattern opacity-40" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-32 bg-gradient-to-b from-transparent via-cyan-500/50 to-transparent" />
+
+      <div className="relative mx-auto max-w-6xl px-6">
+        {/* Header */}
+        <motion.div
+          className="mx-auto max-w-2xl text-center mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="inline-flex items-center gap-2 glass rounded-full px-4 py-2 text-sm text-muted-foreground mb-6 border border-purple-500/20">
+            <Sparkles size={14} className="text-purple-400" />
+            Simple, transparent pricing
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+            <span className="gradient-text-cyan">Pricing that</span>{" "}
+            <span className="gradient-text">scales with you</span>
+          </h2>
+          <p className="text-muted-foreground text-lg">
+            Start free, scale as you grow. No surprise bills, no hidden fees.
+            Cancel anytime.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-3">
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="font-medium">Free</CardTitle>
-              <span className="my-3 block text-2xl font-semibold">$0 / mo</span>
-              <CardDescription className="text-sm">Per editor</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <hr className="border-dashed" />
-              <ul className="list-outside space-y-3 text-sm">
-                {['Basic Analytics Dashboard', '5GB Cloud Storage', 'Email and Chat Support'].map(
-                  (item, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <Check className="size-3" />
-                      {item}
-                    </li>
-                  )
-                )}
-              </ul>
-            </CardContent>
-            <CardFooter className="mt-auto">
-              <Button asChild variant="outline" className="w-full">
-                <Link href="">Get Started</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+        {/* Cards */}
+        <div className="grid gap-6 md:grid-cols-3 items-stretch">
+          {plans.map((plan, i) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1, duration: 0.5 }}
+              className="relative"
+            >
+              {plan.popular && (
+                <div className="absolute -top-3 inset-x-0 flex justify-center z-10">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 px-4 py-1 text-xs font-semibold text-white">
+                    <Zap size={10} />
+                    Most Popular
+                  </span>
+                </div>
+              )}
 
-          <Card className="relative">
-            <span className="absolute inset-x-0 -top-3 mx-auto flex h-6 w-fit items-center rounded-full bg-gradient-to-br from-purple-400 to-amber-300 px-3 py-1 text-xs font-medium text-amber-950 ring-1 ring-inset ring-white/20 ring-offset-1 ring-offset-gray-950/5">
-              Popular
-            </span>
-            <div className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="font-medium">Pro</CardTitle>
-                <span className="my-3 block text-2xl font-semibold">$19 / mo</span>
-                <CardDescription className="text-sm">Per editor</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <hr className="border-dashed" />
-                <ul className="list-outside space-y-3 text-sm">
-                  {[
-                    'Everything in Free Plan',
-                    '5GB Cloud Storage',
-                    'Email and Chat Support',
-                    'Access to Community Forum',
-                    'Single User Access',
-                    'Access to Basic Templates',
-                    'Mobile App Access',
-                    '1 Custom Report Per Month',
-                    'Monthly Product Updates',
-                    'Standard Security Features',
-                  ].map((item, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <Check className="size-3" />
-                      {item}
+              <div
+                className={`h-full flex flex-col rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 ${
+                  plan.popular
+                    ? "glass border border-cyan-500/30 glow-cyan"
+                    : "glass border border-white/5 hover:border-white/10"
+                }`}
+              >
+                {/* Plan header */}
+                <div className="mb-6">
+                  <h3 className="text-lg font-semibold text-foreground mb-1">
+                    {plan.name}
+                  </h3>
+                  <div className="flex items-baseline gap-1 mb-3">
+                    <span className="text-4xl font-bold text-foreground">
+                      {plan.price}
+                    </span>
+                    <span className="text-muted-foreground text-sm">
+                      {plan.period}
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {plan.description}
+                  </p>
+                </div>
+
+                {/* Divider */}
+                <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+
+                {/* Features */}
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5">
+                      <div className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full bg-cyan-500/15 flex items-center justify-center">
+                        <Check size={10} className="text-cyan-400" />
+                      </div>
+                      <span className="text-sm text-muted-foreground">
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
-              </CardContent>
-              <CardFooter>
-                <Button asChild className="w-full">
-                  <Link href="">Get Started</Link>
-                </Button>
-              </CardFooter>
-            </div>
-          </Card>
 
-          <Card className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="font-medium">Startup</CardTitle>
-              <span className="my-3 block text-2xl font-semibold">$29 / mo</span>
-              <CardDescription className="text-sm">Per editor</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <hr className="border-dashed" />
-              <ul className="list-outside space-y-3 text-sm">
-                {[
-                  'Everything in Pro Plan',
-                  '5GB Cloud Storage',
-                  'Email and Chat Support',
-                ].map((item, index) => (
-                  <li key={index} className="flex items-center gap-2">
-                    <Check className="size-3" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter className="mt-auto">
-              <Button asChild variant="outline" className="w-full">
-                <Link href="">Get Started</Link>
-              </Button>
-            </CardFooter>
-          </Card>
+                {/* CTA */}
+                <Button
+                  asChild
+                  variant={plan.ctaVariant}
+                  className={`w-full rounded-xl h-11 font-medium transition-all duration-300 cursor-pointer ${
+                    plan.popular
+                      ? "bg-cyan-500 hover:bg-cyan-400 text-black border-0"
+                      : "border-white/10 hover:border-cyan-500/30 hover:bg-cyan-500/5"
+                  }`}
+                >
+                  <Link href="#">{plan.cta}</Link>
+                </Button>
+              </div>
+            </motion.div>
+          ))}
         </div>
+
+        {/* Bottom note */}
+        <motion.p
+          className="text-center text-sm text-muted-foreground mt-10"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4 }}
+        >
+          All plans include a 14-day free trial. No credit card required.
+        </motion.p>
       </div>
     </section>
-  )
+  );
 }

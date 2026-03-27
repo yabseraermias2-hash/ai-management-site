@@ -327,14 +327,18 @@ export function Header() {
 
   return (
     <div
-      className={`flex sticky px-4 z-50 top-0 w-full bg-background items-center h-16 justify-between transition-all duration-300 ${
-        scrolled ? "border-b" : "border-b-0"
+      className={`flex sticky px-4 z-50 top-0 w-full items-center h-16 justify-between transition-all duration-300 ${
+        scrolled
+          ? "bg-background/80 backdrop-blur-xl border-b border-white/5"
+          : "bg-transparent"
       }`}
     >
       <div className="flex items-center justify-between w-full mx-auto max-w-7xl">
         <div className="flex h-14 items-center justify-center gap-1">
-          <Triangle size={20} className="fill-foreground text-foreground" />
-          <span className="font-semibold text-lg">Vercel</span>
+          <div className="w-6 h-6 rounded-md bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+            <Triangle size={12} className="fill-white text-white" />
+          </div>
+          <span className="font-bold text-lg gradient-text-cyan">Nexus AI</span>
           <NavigationMenu className="ml-8 hidden lg:flex" viewport={true}>
             <NavigationMenuList>
               <NavigationMenuItem>
@@ -530,10 +534,17 @@ export function Header() {
           </NavigationMenu>
         </div>
         <div className="flex gap-2 items-center">
-          <Button variant={"outline"} size={"sm"}>
+          <Button
+            variant={"outline"}
+            size={"sm"}
+            className="rounded-full border-white/10 hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all duration-200"
+          >
             Contact
           </Button>
-          <Button variant={"outline"} size={"sm"}>
+          <Button
+            size={"sm"}
+            className="rounded-full bg-cyan-500 hover:bg-cyan-400 text-black font-medium transition-all duration-200"
+          >
             Dashboard
           </Button>
           <DropdownMenu>
@@ -546,11 +557,11 @@ export function Header() {
                 <AvatarFallback>AI</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-72 p-3 rounded-xl" align="end">
+            <DropdownMenuContent className="w-72 p-3 rounded-xl glass" align="end">
               <div className="p-2">
-                <h1 className="font-semibold">Ali Imam</h1>
+                <h1 className="font-semibold">My Account</h1>
                 <p className="text-sm text-muted-foreground">
-                  contact@aliimam.in
+                  user@nexusai.dev
                 </p>
               </div>
               <DropdownMenuGroup>
