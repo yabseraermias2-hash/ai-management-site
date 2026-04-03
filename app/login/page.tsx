@@ -27,18 +27,6 @@ export default function LoginPage() {
 
     setLoading(true);
     await new Promise((r) => setTimeout(r, 800));
-
-    // Record the login with IP tracking
-    try {
-      await fetch("/api/login-tracker", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.email, success: true }),
-      });
-    } catch {
-      // Don't block login if tracker fails
-    }
-
     setLoading(false);
     window.location.href = "/dashboard";
   };
