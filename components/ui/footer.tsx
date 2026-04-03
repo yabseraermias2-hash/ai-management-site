@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, Zap } from "lucide-react";
+import { Zap, X, MessageCircle, Globe, Code2 } from "lucide-react";
 
 const footerLinks = {
   Product: [
@@ -35,10 +35,10 @@ const footerLinks = {
 };
 
 const socials = [
-  { name: "Twitter / X", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "Discord", href: "#" },
-  { name: "LinkedIn", href: "#" },
+  { name: "X / Twitter", href: "#", icon: X },
+  { name: "GitHub", href: "#", icon: Code2 },
+  { name: "Discord", href: "#", icon: MessageCircle },
+  { name: "Website", href: "#", icon: Globe },
 ];
 
 export function Footer({ className, ...props }: React.ComponentProps<"footer">) {
@@ -59,13 +59,20 @@ export function Footer({ className, ...props }: React.ComponentProps<"footer">) 
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               The AI infrastructure platform built for engineers who demand reliability and performance.
             </p>
-            <div className="flex flex-col gap-2">
-              {socials.map((s) => (
-                <a key={s.name} href={s.href} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group">
-                  {s.name}
-                  <ArrowUpRight size={10} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                </a>
-              ))}
+            <div className="flex gap-3">
+              {socials.map((s) => {
+                const Icon = s.icon;
+                return (
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    aria-label={s.name}
+                    className="w-8 h-8 rounded-lg glass border border-white/5 flex items-center justify-center text-muted-foreground hover:text-cyan-400 hover:border-cyan-500/30 transition-all duration-200 group"
+                  >
+                    <Icon size={14} className="group-hover:scale-110 transition-transform" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 

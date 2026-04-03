@@ -4,11 +4,29 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Zap, Activity, Cpu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useEffect, useRef, useState } from "react";
+
+function useCountUp(target: number, duration = 1800, start = false) {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    if (!start) return;
+    let startTime: number | null = null;
+    const step = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.floor(eased * target));
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }, [target, duration, start]);
+  return value;
+}
 
 const stats = [
-  { label: "Models Deployed", value: "12,400+", icon: Cpu },
-  { label: "Uptime SLA", value: "99.99%", icon: Activity },
-  { label: "Avg Latency", value: "< 50ms", icon: Zap },
+  { label: "Models Deployed", icon: Cpu, type: "countup" as const, target: 12400, suffix: "+", value: "" },
+  { label: "Uptime SLA", icon: Activity, type: "static" as const, target: 0, suffix: "", value: "99.99%" },
+  { label: "Avg Latency", icon: Zap, type: "static" as const, target: 0, suffix: "", value: "< 50ms" },
 ];
 
 const floatingCards = [
@@ -18,12 +36,52 @@ const floatingCards = [
   { title: "Cost Saved", value: "$18,200", change: "vs last month", positive: true, top: "65%", right: "1%" },
 ];
 
+function AnimatedStat({ stat }: { stat: (typeof stats)[0] }) {
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const count = useCountUp(stat.type === "countup" ? stat.target : 0, 1800, started && stat.type === "countup");
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const Icon = stat.icon;
+  const displayValue =
+    stat.type === "countup" ? `${count.toLocaleString()}${stat.suffix}` : stat.value;
+
+  return (
+    <div
+      ref={ref}
+      className="glass rounded-xl p-4 border border-white/5 hover:border-cyan-500/20 transition-colors group"
+    >
+      <Icon size={16} className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
+      <div className="text-2xl font-bold text-foreground">{displayValue}</div>
+      <div className="text-xs text-muted-foreground">{stat.label}</div>
+    </div>
+  );
+}
+
 export function Hero() {
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 grid-pattern opacity-60" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pulse-glow pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pulse-glow pointer-events-none" style={{ animationDelay: "1.5s" }} />
+      <div
+        className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pulse-glow pointer-events-none"
+        style={{ animationDelay: "1.5s" }}
+      />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {floatingCards.map((card, i) => (
@@ -37,7 +95,9 @@ export function Hero() {
         >
           <p className="text-xs text-muted-foreground mb-1">{card.title}</p>
           <p className="text-lg font-bold text-foreground">{card.value}</p>
-          <p className={`text-xs ${card.positive ? "text-emerald-400" : "text-red-400"}`}>{card.change}</p>
+          <p className={`text-xs ${card.positive ? "text-emerald-400" : "text-red-400"}`}>
+            {card.change}
+          </p>
         </motion.div>
       ))}
 
@@ -72,7 +132,8 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.7 }}
         >
-          Unified platform for deploying, monitoring, and optimizing your AI models, agents, and workflows. Ship faster. Scale smarter. Spend less.
+          Unified platform for deploying, monitoring, and optimizing your AI models, agents, and
+          workflows. Ship faster. Scale smarter. Spend less.
         </motion.p>
 
         <motion.div
@@ -82,13 +143,20 @@ export function Hero() {
           transition={{ delay: 0.3, duration: 0.7 }}
         >
           <Link href="/signup">
-            <Button size="lg" className="rounded-full h-12 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold glow-cyan transition-all duration-300 cursor-pointer">
+            <Button
+              size="lg"
+              className="rounded-full h-12 px-8 bg-cyan-500 hover:bg-cyan-400 text-black font-semibold glow-cyan transition-all duration-300 cursor-pointer"
+            >
               <Zap size={16} className="mr-2" />
               Start Free
             </Button>
           </Link>
           <Link href="/dashboard">
-            <Button size="lg" variant="outline" className="rounded-full h-12 px-8 border-muted-foreground/20 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 cursor-pointer">
+            <Button
+              size="lg"
+              variant="outline"
+              className="rounded-full h-12 px-8 border-muted-foreground/20 hover:border-cyan-500/50 hover:bg-cyan-500/5 transition-all duration-300 cursor-pointer"
+            >
               View Demo
               <ArrowRight size={16} className="ml-2" />
             </Button>
@@ -101,16 +169,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.7 }}
         >
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div key={stat.label} className="glass rounded-xl p-4 border border-white/5 hover:border-cyan-500/20 transition-colors group">
-                <Icon size={16} className="text-cyan-400 mb-2 group-hover:scale-110 transition-transform" />
-                <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-                <div className="text-xs text-muted-foreground">{stat.label}</div>
-              </div>
-            );
-          })}
+          {stats.map((stat) => (
+            <AnimatedStat key={stat.label} stat={stat} />
+          ))}
         </motion.div>
       </div>
 

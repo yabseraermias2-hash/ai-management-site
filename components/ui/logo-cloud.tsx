@@ -1,88 +1,47 @@
+"use client";
+
+import { motion } from "framer-motion";
+
+const logos = [
+  { name: "OpenAI", text: "OpenAI" },
+  { name: "Stripe", text: "Stripe" },
+  { name: "Shopify", text: "Shopify" },
+  { name: "Linear", text: "Linear" },
+  { name: "Vercel", text: "Vercel" },
+  { name: "Anthropic", text: "Anthropic" },
+  { name: "Resend", text: "Resend" },
+  { name: "Supabase", text: "Supabase" },
+  { name: "Railway", text: "Railway" },
+  { name: "GitHub", text: "GitHub" },
+];
+
 export default function LogoCloud() {
   return (
-    <section className="bg-background py-16">
-      <div className="mx-auto max-w-5xl px-6">
-        <h2 className="text-center text-lg font-medium">
-          Your favorite companies are our partners.
-        </h2>
-        <div className="mx-auto mt-20 flex max-w-4xl flex-wrap items-center justify-center gap-x-12 gap-y-8 sm:gap-x-16 sm:gap-y-12">
-          <img
-            className="h-5 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/nvidia.svg"
-            alt="Nvidia Logo"
-            height="20"
-            width="auto"
-          />
-          <img
-            className="h-4 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/column.svg"
-            alt="Column Logo"
-            height="16"
-            width="auto"
-          />
-          <img
-            className="h-4 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/github.svg"
-            alt="GitHub Logo"
-            height="16"
-            width="auto"
-          />
-          <img
-            className="h-5 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/nike.svg"
-            alt="Nike Logo"
-            height="20"
-            width="auto"
-          />
-          <img
-            className="h-4 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/laravel.svg"
-            alt="Laravel Logo"
-            height="16"
-            width="auto"
-          />
-          <img
-            className="h-7 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/lilly.svg"
-            alt="Lilly Logo"
-            height="28"
-            width="auto"
-          />
-          <img
-            className="h-5 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/lemonsqueezy.svg"
-            alt="Lemon Squeezy Logo"
-            height="20"
-            width="auto"
-          />
-          <img
-            className="h-6 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/openai.svg"
-            alt="OpenAI Logo"
-            height="24"
-            width="auto"
-          />
-          <img
-            className="h-4 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/tailwindcss.svg"
-            alt="Tailwind CSS Logo"
-            height="16"
-            width="auto"
-          />
-          <img
-            className="h-5 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/vercel.svg"
-            alt="Vercel Logo"
-            height="20"
-            width="auto"
-          />
-          <img
-            className="h-5 w-fit dark:invert"
-            src="https://html.tailus.io/blocks/customers/zapier.svg"
-            alt="Zapier Logo"
-            height="20"
-            width="auto"
-          />
+    <section className="relative py-14 overflow-hidden border-y border-white/5">
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" />
+
+      <motion.div
+        className="text-center mb-8"
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
+        <p className="text-sm text-muted-foreground tracking-widest uppercase">
+          Trusted by teams at
+        </p>
+      </motion.div>
+
+      <div className="relative flex overflow-hidden">
+        <div className="flex animate-marquee gap-16 items-center whitespace-nowrap">
+          {[...logos, ...logos].map((logo, i) => (
+            <span
+              key={i}
+              className="text-xl font-bold text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors duration-300 select-none tracking-tight"
+            >
+              {logo.name}
+            </span>
+          ))}
         </div>
       </div>
     </section>
