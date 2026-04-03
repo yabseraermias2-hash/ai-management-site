@@ -14,7 +14,7 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
   const [showKey, setShowKey] = useState<number | null>(null);
   const [copied, setCopied] = useState<number | null>(null);
-  const [profile, setProfile] = useState({ name: "Alex Johnson", email: "user@nexusai.dev", company: "Acme Inc." });
+  const [profile, setProfile] = useState({ name: "Yabsera", email: "user@nexusai.dev", company: "Acme Inc." });
   const [notifications, setNotifications] = useState({ latency: true, cost: true, agent: false, deploy: true });
 
   const handleSave = () => {

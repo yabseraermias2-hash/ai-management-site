@@ -181,7 +181,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 glass" align="end">
                 <div className="px-3 py-2 border-b border-white/5">
-                  <p className="text-sm font-medium">Alex Johnson</p>
+                  <p className="text-sm font-medium">Yabsera</p>
                   <p className="text-xs text-muted-foreground">user@nexusai.dev</p>
                 </div>
                 <DropdownMenuItem asChild className="cursor-pointer">
