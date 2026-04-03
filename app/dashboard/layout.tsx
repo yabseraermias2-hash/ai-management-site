@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutDashboard, Brain, Bot, Activity, CreditCard, Settings,
+  LayoutDashboard, Brain, Bot, Activity, CreditCard, Settings, Shield,
   Triangle, Menu, X, Bell, Search, LogOut, User,
   HelpCircle, Zap, ChevronRight,
 } from "lucide-react";
@@ -26,6 +26,7 @@ const navItems = [
   { label: "Observability", icon: Activity, href: "/dashboard/observability" },
   { label: "Billing", icon: CreditCard, href: "/dashboard/billing" },
   { label: "Settings", icon: Settings, href: "/dashboard/settings" },
+  { label: "Security", icon: Shield, href: "/dashboard/security" },
 ];
 
 const notifications = [
