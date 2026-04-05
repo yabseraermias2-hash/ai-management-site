@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, Eye, EyeOff, Triangle, Check, Zap } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { saveUser, saveSession, findUserByEmail, findUserByUsername } from "@/lib/auth";
 
 function SignupForm() {
   const searchParams = useSearchParams();
   const plan = searchParams.get("plan") ?? "starter";
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [form, setForm] = useState({ name: "", username: "", email: "", password: "" });
   const [showPw, setShowPw] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
@@ -25,12 +26,29 @@ function SignupForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: Record<string, string> = {};
-    if (!form.name.trim()) errs.name = "Name is required";
+    if (!form.name.trim()) errs.name = "Full name is required";
+    if (!form.username.trim()) errs.username = "Username is required";
+    else if (!/^[a-zA-Z0-9_]{3,20}$/.test(form.username)) errs.username = "3–20 chars, letters/numbers/underscores only";
+    else if (findUserByUsername(form.username)) errs.username = "Username already taken";
     if (!form.email) errs.email = "Email is required";
+    else if (findUserByEmail(form.email)) errs.email = "An account with this email already exists";
     if (!form.password || form.password.length < 8) errs.password = "Minimum 8 characters";
     if (Object.keys(errs).length) { setErrors(errs); return; }
+
     setLoading(true);
     await new Promise((r) => setTimeout(r, 900));
+
+    const user = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      username: form.username.trim(),
+      email: form.email.trim(),
+      password: form.password,
+      plan,
+      createdAt: new Date().toISOString(),
+    };
+    saveUser(user);
+    saveSession({ userId: user.id, username: user.username, email: user.email, plan: user.plan });
+
     setLoading(false);
     window.location.href = "/dashboard";
   };
@@ -81,18 +99,34 @@ function SignupForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
-              {[
-                { name: "name", label: "Full Name", type: "text", placeholder: "Alex Johnson" },
-                { name: "email", label: "Work Email", type: "email", placeholder: "you@company.com" },
-              ].map((f) => (
-                <div key={f.name} className="space-y-1.5">
-                  <label className="text-sm font-medium">{f.label}</label>
-                  <input name={f.name} type={f.type} value={(form as Record<string, string>)[f.name]} onChange={handleChange} placeholder={f.placeholder}
-                    className={`w-full bg-white/5 border ${errors[f.name] ? "border-red-500/50" : "border-white/10 focus:border-cyan-500/50"} rounded-xl px-4 py-2.5 text-sm outline-none transition-colors`} />
-                  {errors[f.name] && <p className="text-xs text-red-400 flex items-center gap-1"><AlertCircle size={11} />{errors[f.name]}</p>}
-                </div>
-              ))}
+              {/* Full Name */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Full Name</label>
+                <input name="name" type="text" value={form.name} onChange={handleChange} placeholder="Your full name"
+                  className={`w-full bg-white/5 border ${errors.name ? "border-red-500/50" : "border-white/10 focus:border-cyan-500/50"} rounded-xl px-4 py-2.5 text-sm outline-none transition-colors`} />
+                {errors.name && <p className="text-xs text-red-400 flex items-center gap-1"><AlertCircle size={11} />{errors.name}</p>}
+              </div>
 
+              {/* Username */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Username</label>
+                <div className="relative">
+                  <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground text-sm">@</span>
+                  <input name="username" type="text" value={form.username} onChange={handleChange} placeholder="your_username"
+                    className={`w-full bg-white/5 border ${errors.username ? "border-red-500/50" : "border-white/10 focus:border-cyan-500/50"} rounded-xl pl-8 pr-4 py-2.5 text-sm outline-none transition-colors`} />
+                </div>
+                {errors.username && <p className="text-xs text-red-400 flex items-center gap-1"><AlertCircle size={11} />{errors.username}</p>}
+              </div>
+
+              {/* Email */}
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Work Email</label>
+                <input name="email" type="email" value={form.email} onChange={handleChange} placeholder="you@company.com"
+                  className={`w-full bg-white/5 border ${errors.email ? "border-red-500/50" : "border-white/10 focus:border-cyan-500/50"} rounded-xl px-4 py-2.5 text-sm outline-none transition-colors`} />
+                {errors.email && <p className="text-xs text-red-400 flex items-center gap-1"><AlertCircle size={11} />{errors.email}</p>}
+              </div>
+
+              {/* Password */}
               <div className="space-y-1.5">
                 <label className="text-sm font-medium">Password</label>
                 <div className="relative">

@@ -94,7 +94,11 @@ export function Footer({ className, ...props }: React.ComponentProps<"footer">) 
 
         <div className="border-t border-white/5 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-muted-foreground">© {new Date().getFullYear()} Nexus AI, Inc. All rights reserved.</p>
-          <p className="text-xs text-muted-foreground">Built for engineers who move fast.</p>
+          <p className="text-xs text-muted-foreground">
+            Built by{" "}
+            <span className="gradient-text font-semibold">Yabsera</span>
+            {" "}· Built for engineers who move fast.
+          </p>
         </div>
       </div>
     </footer>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   TrendingUp, TrendingDown, Brain, Bot, DollarSign, Zap,
@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getSession } from "@/lib/auth";
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
@@ -98,6 +99,12 @@ export default function DashboardPage() {
   const [sortField, setSortField] = useState<string>("rpm");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
   const [timeRange, setTimeRange] = useState("30d");
+  const [username, setUsername] = useState("there");
+
+  useEffect(() => {
+    const session = getSession();
+    if (session?.username) setUsername(session.username);
+  }, []);
 
   const sorted = [...models].sort((a, b) => {
     const aVal = (a as Record<string, unknown>)[sortField] as number;
@@ -127,7 +134,7 @@ export default function DashboardPage() {
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold">{greeting}, Yabsera 👋</h1>
+          <h1 className="text-xl font-bold">{greeting}, {username} 👋</h1>
           <p className="text-sm text-muted-foreground mt-0.5">{dateStr} · Starter Plan</p>
         </div>
         <div className="flex items-center gap-2">

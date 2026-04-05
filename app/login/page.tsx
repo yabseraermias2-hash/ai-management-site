@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { AlertCircle, Eye, EyeOff, Triangle, Zap } from "lucide-react";
+import { findUserByEmail, saveSession } from "@/lib/auth";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -27,10 +28,19 @@ export default function LoginPage() {
 
     setLoading(true);
     await new Promise((r) => setTimeout(r, 800));
+
+    // Look up user in localStorage
+    const user = findUserByEmail(form.email);
+    if (!user || user.password !== form.password) {
+      setErrors({ password: "Invalid email or password" });
+      setLoading(false);
+      return;
+    }
+
+    saveSession({ userId: user.id, username: user.username, email: user.email, plan: user.plan });
     setLoading(false);
     window.location.href = "/dashboard";
   };
-
 
   return (
     <main className="min-h-screen flex flex-col bg-background relative overflow-hidden">

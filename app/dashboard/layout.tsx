@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { getSession, clearSession, type Session } from "@/lib/auth";
 import {
   LayoutDashboard, Brain, Bot, Activity, CreditCard, Settings,
   Triangle, Menu, X, Bell, Search, LogOut, User,
@@ -37,12 +38,19 @@ const notifications = [
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
+  const [session, setSession] = useState<Session | null>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    setSession(getSession());
+  }, []);
 
   useEffect(() => {
     setSidebarOpen(false);
   }, [pathname]);
 
+  const username = session?.username ?? "Guest";
+  const avatarInitial = username.charAt(0).toUpperCase();
   const unreadCount = notifications.filter((n) => n.unread).length;
 
   return (
@@ -176,13 +184,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <DropdownMenuTrigger asChild>
                 <Avatar className="w-8 h-8 border cursor-pointer">
                   <AvatarImage src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="User" />
-                  <AvatarFallback>AI</AvatarFallback>
+                  <AvatarFallback className="bg-gradient-to-br from-cyan-500 to-purple-500 text-white text-xs font-bold">{avatarInitial}</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 glass" align="end">
                 <div className="px-3 py-2 border-b border-white/5">
-                  <p className="text-sm font-medium">Yabsera</p>
-                  <p className="text-xs text-muted-foreground">user@nexusai.dev</p>
+                  <p className="text-sm font-medium">@{username}</p>
+                  <p className="text-xs text-muted-foreground">{session?.email ?? "user@nexusai.dev"}</p>
                 </div>
                 <DropdownMenuItem asChild className="cursor-pointer">
                   <Link href="/dashboard/settings"><User size={14} className="mr-2" />Account Settings</Link>
@@ -191,8 +199,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   <Link href="/pricing"><Zap size={14} className="mr-2 text-cyan-400" />Upgrade Plan</Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild className="cursor-pointer text-muted-foreground">
-                  <Link href="/"><LogOut size={14} className="mr-2" />Back to Site</Link>
+                <DropdownMenuItem
+                  className="cursor-pointer text-muted-foreground"
+                  onClick={() => { clearSession(); window.location.href = "/login"; }}
+                >
+                  <LogOut size={14} className="mr-2" />Sign out
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
