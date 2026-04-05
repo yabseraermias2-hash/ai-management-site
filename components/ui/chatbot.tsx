@@ -47,6 +47,9 @@ function getBotResponse(input: string): string {
   if (/doc|api|sdk|reference|integrate|code/.test(q)) {
     return "Nexus AI has first-class developer tooling:\n\n• **REST API** — simple, OpenAI-compatible endpoints\n• **TypeScript SDK** — fully typed, works with Next.js out of the box\n• **Python SDK** — async & sync support\n• **Docs** — full reference available at /docs\n\nMost teams are making their first inference in under 5 minutes.";
   }
+  if (/who made|who built|who created|who develop|who design|your creator|your maker|who are you made by/.test(q)) {
+    return "I was created by **YABSERA KEBEDE** 🙌 He built the entire Nexus AI platform. Is there anything I can help you with today?";
+  }
   if (/hello|hi|hey|sup|wsg|what.s up|how are/.test(q)) {
     return "Hey! 👋 I'm the Nexus AI assistant. I can help you with pricing, supported models, getting started, security, enterprise plans, and more. What would you like to know?";
   }
